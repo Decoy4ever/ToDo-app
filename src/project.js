@@ -1,0 +1,1 @@
+export const projects = "Here Projects are to be developed"
