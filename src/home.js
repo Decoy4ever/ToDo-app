@@ -1,4 +1,5 @@
 import "./styles.css"
+import {task} from "./task.js"
 // import {projects} from "./project.js"
 
 // what are the share charcteristics of each list
@@ -21,7 +22,8 @@ class SwitchTabs
             btn.addEventListener("click", ()=> {
                if(btn.textContent === "Today")
                {
-                console.log("I click on Today list")
+                // console.log("I click on Today list")
+                task.showTaskDetails()
                }
                else if(btn.textContent === "List")
                {
