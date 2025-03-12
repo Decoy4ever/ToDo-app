@@ -1,6 +1,6 @@
 import "./styles.css"
 import {task} from "./task.js"
-// import {projects} from "./project.js"
+import {projects} from "./project.js"
 
 // what are the share charcteristics of each list
 // 1. have a header for each link
@@ -22,12 +22,11 @@ class SwitchTabs
             btn.addEventListener("click", ()=> {
                if(btn.textContent === "Today")
                {
-                // console.log("I click on Today list")
-                task.showTaskDetails()
+                task.printTasksDetails()
                }
                else if(btn.textContent === "List")
                {
-                console.log("I clicked on General List")
+                projects.createButton()
                }
                else if(btn.textContent === "Completed")
                {
