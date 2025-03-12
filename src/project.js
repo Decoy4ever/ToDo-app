@@ -36,7 +36,7 @@ class createProject extends Project
  * Handle the dom elements of List UI include the following
  * creating a text value from creating a instance of the class createList
  * creating a button 
- * creates new tasks
+ * creating div for containement of list of project buttons
  */
 class ProjectUI
 {
@@ -46,13 +46,26 @@ class ProjectUI
         this.listTitle = new createProject()
     }
 
-    createButton()
+    dropDownUI()
     {
+        // create elements for dropDown menu
         const listBtn = document.createElement("button")
+        const dropDownDivContainer = document.createElement("div")
+        const dropDownDivContent = document.createElement("div")
+        
+        // add class names
+        dropDownDivContainer.classList.add("dropdown")
+        dropDownDivContent.classList.add("dropdown-content")
         listBtn.classList.add("list-btn")
+
+        // get the value of tht title from createProject instance
         this.listTitle.createTitle()
         listBtn.textContent = this.listTitle.getTitle()
-        this.projectList.appendChild(listBtn)
+
+        // append it ot the `button.project-list`
+        dropDownDivContent.appendChild(listBtn)
+        dropDownDivContainer.appendChild(dropDownDivContent)
+        this.projectList.appendChild(dropDownDivContainer)
     }
 }
 
