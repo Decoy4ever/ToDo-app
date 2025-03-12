@@ -1,8 +1,9 @@
-class List
+class Project
 {
     contructor(title)
     {
         this.title = title
+        this.listArr = []
     }
 }
 
@@ -11,7 +12,7 @@ class List
  * then creates a sub-button that is appended to parent List button
  * 
  */
-class createList extends List
+class createProject extends Project
 {
     constructor(title)
     {
@@ -37,12 +38,12 @@ class createList extends List
  * creating a button 
  * creates new tasks
  */
-class ListUI
+class ProjectUI
 {
     constructor()
     {
         this.projectList = document.querySelector(".project-list")
-        this.listTitle = new createList()
+        this.listTitle = new createProject()
     }
 
     createButton()
@@ -55,5 +56,5 @@ class ListUI
     }
 }
 
-export const projects = new ListUI()
+export const projects = new ProjectUI()
 
