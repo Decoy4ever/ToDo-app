@@ -59,7 +59,43 @@ class PrintAllTasks
     }
 }
 
+// create search bar with add button
+// add submit button
+// create a form
+// get the form value and print out in web page
+class TaskUI
+{  
+    constructor()
+    {
+        this.mainContent = document.querySelector(".main-content")
+    } 
+
+    addTaskFormUI()
+    {
+        const div = document.createElement("div")
+        div.classList.add("add-container")
+        
+        // Create a form
+        const form = document.createElement("form")
+        const btn = document.createElement("button")
+        const input = document.createElement("input")
+
+        btn.textContent = "+"
+        btn.setAttribute("type", "button")
+
+        input.setAttribute("type","text")
+        input.setAttribute("placeholder","+ Add task")
+        
+        form.appendChild(input)
+        form.appendChild(btn)
+        div.appendChild(form)
+        this.mainContent.appendChild(div)
+    }
+    
+}
+
 export const task = new PrintAllTasks()
+export const taskUI = new TaskUI()
 
 
 

@@ -1,32 +1,47 @@
 import "./styles.css"
 import {task} from "./task.js"
+import {taskUI} from "./task.js"
 import {projects} from "./project.js"
 
-// what are the share charcteristics of each list
-// 1. have a header for each link
-// 2. have add task link
+
+class TodayPage 
+{
+    constructor()
+    {
+        this.mainContent = document.querySelector(".main-content")
+        this.header = document.createElement("h1")
+    }
+
+    content()
+    {
+        // Add Header
+        this.header.textContent = "Today"
+        this.mainContent.appendChild(this.header)
+
+        // Add the addtaskFormUI
+        taskUI.addTaskFormUI()     
+    }
+}
+
 class SwitchTabs 
 {
     constructor()
     {
         this.buttonTabs = document.querySelectorAll("button")
+        this.todayContent = new TodayPage()
     }
 
     openLinkTabs()
     {
-        const todayList = document.getElementsByClassName("today-list")
-        // loop through the buttons
-        // if the button text is equivalent to the certain text
-        // print out the a msg 
         this.buttonTabs.forEach((btn) => {
             btn.addEventListener("click", ()=> {
                if(btn.textContent === "Today")
                {
-                task.printTasksDetails()
+                this.todayContent.content()
                }
                else if(btn.textContent === "List")
                {
-                projects.createButton()
+                projects.dropDownUI()
                }
                else if(btn.textContent === "Completed")
                {
