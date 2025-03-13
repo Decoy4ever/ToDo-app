@@ -42,14 +42,10 @@ class createTask extends Task
  * Print out all the tasks
  */
 class PrintAllTasks 
-{
-    constructor()
-    {
-        this.newTask = new createTask()
-    }
-
+{   
     printTasksDetails()
     {
+        this.newTask = new createTask()
         this.newTask.title = prompt("Enter a title")
         this.newTask.description = prompt("Enter a description")
         this.newTask.dueDate = prompt("Enter a dueDate")
@@ -64,34 +60,30 @@ class PrintAllTasks
 // create a form
 // get the form value and print out in web page
 class TaskUI
-{  
-    constructor()
+{      
+    addTaskUI()
     {
         this.mainContent = document.querySelector(".main-content")
-    } 
-
-    addTaskFormUI()
-    {
         const div = document.createElement("div")
         div.classList.add("add-container")
         
         // Create a form
-        const form = document.createElement("form")
-        const btn = document.createElement("button")
-        const input = document.createElement("input")
+        this.form = document.createElement("form")
+        this.btn = document.createElement("button")
+        this.input = document.createElement("input")
 
-        btn.textContent = "+"
-        btn.setAttribute("type", "button")
+        this.btn.textContent = "+"
+        this.btn.setAttribute("type", "button")
+        this.btn.setAttribute("class","addBtn")
 
-        input.setAttribute("type","text")
-        input.setAttribute("placeholder","+ Add task")
+        this.input.setAttribute("type","text")
+        this.input.setAttribute("placeholder","+ Add task")
         
-        form.appendChild(input)
-        form.appendChild(btn)
-        div.appendChild(form)
+        this.form.appendChild(this.input)
+        this.form.appendChild(this.btn)
+        div.appendChild(this.form)
         this.mainContent.appendChild(div)
-    }
-    
+    }    
 }
 
 export const task = new PrintAllTasks()
