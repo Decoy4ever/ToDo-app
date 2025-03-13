@@ -16,6 +16,41 @@
         <div class = "main-content">
         </div>
         <div class = "footer">
+            <dialog class = "dialog">
+                <form class = "form-container">
+                    <div>
+                        <h3>Enter Task</h3>
+                    </div>
+                    <div>
+                        <label for = "title"><strong>Title:</strong></label>
+                        <input type = "text" name = "title" class = "title" required>
+                    </div>
+        
+                    <div>
+                        <label for = "description"><strong>Description:</strong></label>
+                        <input type = "text" name = "description" class = "description" required>    
+                    </div>
+        
+                    <div>
+                        <label for = "due-date"><strong>Due Date:</strong></label>
+                        <input type = "number" name = "due-date" class = "due-date" min = "1" max = "5000" required>    
+                    </div>
+        
+                    <div>
+                        <label for = "Priority"><strong>Priority:</strong></label>
+                        <select name = "Priority" class = "Priority">
+                            <option value = "High">High</option>
+                            <option value = "Low">Low</option>
+                        </select>    
+                    </div>
+        
+                    <div>
+                        <button type = "button" class = "exit-btn">Exit</button>
+                        <button type = "reset" class = "reset-btn">Reset</button>
+                        <button type = "button" class = "submit-btn">Submit</button>
+                    </div>
+                </form>
+            </dialog>
         </div>
     </header>
 </body>
