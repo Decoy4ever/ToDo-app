@@ -1,5 +1,5 @@
-import {task1} from "./task.js"
-import {task2} from "./task.js"
+// import the `class Task`
+import {Task} from "./task.js"
 import {taskUI} from "./task.js"
 
 class TodayProject 
@@ -18,6 +18,45 @@ class TodayProject
     getAllTasks()
     {
         return this.projectList
+    }
+}
+
+
+class showTasksInProjectUI
+{
+    constructor()
+    {
+        this.TodayProject = new TodayProject()
+        this.mainContent = document.querySelector(".main-content")
+        this.title = document.querySelector(".title")
+        this.description = document.querySelector(".description")
+        this.dueDate = document.querySelector(".due-date")
+        this.priority = document.querySelector(".priority")
+    }
+
+    createTask()
+    {
+        this.contentDiv = document.createElement("div")
+        this.mainContent.appendChild(this.contentDiv)
+
+        let title = `${this.title.value}`
+        let description = `${this.description.value}`
+        let dueDate = `${this.dueDate.value}`
+        let priority = `${this.priority.value}`
+
+        // create a instance of task class
+        const newTask = new Task(title,description,dueDate,priority)
+        
+        // push the instance of task into the projectList
+        this.TodayProject.addTaskToProject(newTask)
+        console.log(this.TodayProject.getAllTasks())
+
+        const div = document.createElement("div")
+        this.TodayProject.projectList.forEach((task) => {
+            div.textContent = `${task.title} ${task.description} ${task.priority} ${task.priority}`
+            this.contentDiv.appendChild(div) 
+        })
+        
     }
 }
 
@@ -48,11 +87,11 @@ class TodayUI
 class DialogUI
 {
     constructor()
-    {       
+    {   
+        this.projectTask = new showTasksInProjectUI()    
         this.dialog = document.querySelector(".dialog")
         this.submitBtn = document.querySelector(".submit-btn");
         this.closeModal = document.querySelector('.exit-btn');
-    
     }
     
     showDialog()
@@ -69,7 +108,8 @@ class DialogUI
         this.submitBtn.addEventListener('click',(e) => 
         {
             console.log("Form Submitted")
-            taskUI.getTaskInfo()
+            this.projectTask.createTask()
+            // taskUI.getTaskInfo()
             e.preventDefault();
             // this.dialog.close();  
         }) 
