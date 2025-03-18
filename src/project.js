@@ -21,7 +21,6 @@ class TodayProject
     }
 }
 
-
 class showTasksInProjectUI
 {
     constructor()
@@ -45,34 +44,39 @@ class showTasksInProjectUI
         let priority = `${this.priority.value}`
 
         // create a instance of task class
-        const newTask = new Task(title,description,dueDate,priority)
+        this.newTask = new Task(title,description,dueDate,priority)
         
         // push the instance of task into the projectList
-        this.TodayProject.addTaskToProject(newTask)
-        console.log(this.TodayProject.getAllTasks())
+        this.TodayProject.addTaskToProject(this.newTask)
 
         const div = document.createElement("div")
+        this.completeTaskBtn = document.createElement("button")
+        this.deleteTaskBtn = document.createElement("button")
+
         this.TodayProject.projectList.forEach((task) => {
             div.textContent = `${task.title} ${task.description} ${task.priority} ${task.priority}`
-            this.contentDiv.appendChild(div) 
-        })
-        
+            this.contentDiv.appendChild(div)
+            
+            // create a complete button
+            this.completeTaskBtn.setAttribute("type","button") 
+            this.completeTaskBtn.textContent = "Complete"
+            
+            // create a delete button
+            this.deleteTaskBtn.setAttribute("type","button")
+            this.deleteTaskBtn.textContent = "Delete"
+
+            this.contentDiv.appendChild(this.completeTaskBtn)
+            this.contentDiv.appendChild(this.deleteTaskBtn)
+
+            this.deleteTaskBtn.addEventListener("click",()=> {
+                console.log("Clicked Delete")
+                div.style.textDecorationLine = "line-through"
+            })
+        }) 
     }
 }
 
-// retreive the object and pass into the array
-// const project_task1 = task1.getTaskDetails()
-// const project_task2 = task2.getTaskDetails()
-// console.log(project_task1)
-// console.log(project_task2)
 
-// // create an instance of todayProject
-// export const todayProject = new TodayProject()
-// todayProject.addTaskToProject(project_task1)
-// todayProject.addTaskToProject(project_task2)
-
-// //print out arr
-// todayProject.getAllTasks()
 
 
 class TodayUI
@@ -109,9 +113,8 @@ class DialogUI
         {
             console.log("Form Submitted")
             this.projectTask.createTask()
-            // taskUI.getTaskInfo()
             e.preventDefault();
-            // this.dialog.close();  
+            this.dialog.close();  
         }) 
     }
 
@@ -129,11 +132,6 @@ class DialogUI
 
 export const dialogUI = new DialogUI()
 export const homeUI = new TodayUI()
-
-
-
-
-
 
 
 /**
