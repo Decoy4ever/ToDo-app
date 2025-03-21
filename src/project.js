@@ -7,12 +7,18 @@ class TodayProject
     constructor()
     {
         this.projectList = []
+        this.trashList = []
     }
 
     // create a task and add to the project
     addTaskToProject(tasks)
     {
         return this.projectList.push(tasks)
+    }
+
+    removeTaskFromProjects(task)
+    {
+        return this.trashList = this.projectList.filter((el,index) => index === task)
     }
 
     getAllTasks()
@@ -35,27 +41,28 @@ class showTasksInProjectUI
 
     createTask()
     {
-        this.contentDiv = document.createElement("div")
-        this.mainContent.appendChild(this.contentDiv)
-
         let title = `${this.title.value}`
         let description = `${this.description.value}`
         let dueDate = `${this.dueDate.value}`
         let priority = `${this.priority.value}`
 
-        // create a instance of task class
-        this.newTask = new Task(title,description,dueDate,priority)
-        
-        // push the instance of task into the projectList
-        this.TodayProject.addTaskToProject(this.newTask)
+        this.contentDiv = document.createElement("div")
+        this.mainContent.appendChild(this.contentDiv)
 
-        const div = document.createElement("div")
+        this.div = document.createElement("div")
         this.completeTaskBtn = document.createElement("button")
         this.deleteTaskBtn = document.createElement("button")
 
+        // create a instance of task class
+        this.newTask = new Task(title,description,dueDate,priority)
+        this.value = 0
+
+        // push the instance of task into the projectList
+        this.TodayProject.addTaskToProject(this.newTask)
+
         this.TodayProject.projectList.forEach((task) => {
-            div.textContent = `${task.title} ${task.description} ${task.priority} ${task.priority}`
-            this.contentDiv.appendChild(div)
+            this.div.textContent = `${task.title} ${task.description} ${task.priority} ${task.priority}`
+            this.contentDiv.appendChild(this.div)
             
             // create a complete button
             this.completeTaskBtn.setAttribute("type","button") 
@@ -64,20 +71,29 @@ class showTasksInProjectUI
             // create a delete button
             this.deleteTaskBtn.setAttribute("type","button")
             this.deleteTaskBtn.textContent = "Delete"
+            this.deleteTaskBtn.setAttribute("value",`${this.value++}`)
 
             this.contentDiv.appendChild(this.completeTaskBtn)
             this.contentDiv.appendChild(this.deleteTaskBtn)
-
-            this.deleteTaskBtn.addEventListener("click",()=> {
-                console.log("Clicked Delete")
-                div.style.textDecorationLine = "line-through"
-            })
         }) 
+
+        // return the list of tasks in home project
+        console.log(this.TodayProject.getAllTasks())
+
+        return this.TodayProject.getAllTasks()
+    }
+    
+    removeTask()
+    {
+        this.deleteBtnVal = this.deleteTaskBtn.value
+        this.TodayProject.projectList.forEach((task,index) => {
+            this.deleteTaskBtn.addEventListener("click",() => {
+                    this.div.style.textDecorationLine = "line-through"
+                    console.log(this.TodayProject.removeTaskFromProjects(index))
+            })
+        })
     }
 }
-
-
-
 
 class TodayUI
 {
@@ -113,6 +129,7 @@ class DialogUI
         {
             console.log("Form Submitted")
             this.projectTask.createTask()
+            this.projectTask.removeTask()
             e.preventDefault();
             this.dialog.close();  
         }) 
@@ -132,7 +149,6 @@ class DialogUI
 
 export const dialogUI = new DialogUI()
 export const homeUI = new TodayUI()
-
 
 /**
  * Handle the dom elements of List UI include the following
