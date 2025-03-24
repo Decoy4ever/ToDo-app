@@ -18,7 +18,15 @@ class TodayProject
 
     removeTaskFromProjects(task)
     {
-        return this.trashList = this.projectList.filter((el,index) => index === task)
+        this.trashList.push(task)
+
+        // update the current tasks avaliable in the project
+        this.projectList = this.projectList.filter((el) => el !== task)
+    }
+
+    getAllTrashTasks()
+    {
+        return this.trashList
     }
 
     getAllTasks()
@@ -41,6 +49,7 @@ class showTasksInProjectUI
 
     createTask()
     {
+        // retrieve the values of user input
         let title = `${this.title.value}`
         let description = `${this.description.value}`
         let dueDate = `${this.dueDate.value}`
@@ -50,17 +59,17 @@ class showTasksInProjectUI
         this.mainContent.appendChild(this.contentDiv)
 
         this.div = document.createElement("div")
+        this.div.setAttribute("class","task-div")
         this.completeTaskBtn = document.createElement("button")
         this.deleteTaskBtn = document.createElement("button")
 
         // create a instance of task class
         this.newTask = new Task(title,description,dueDate,priority)
-        this.value = 0
 
         // push the instance of task into the projectList
         this.TodayProject.addTaskToProject(this.newTask)
 
-        this.TodayProject.projectList.forEach((task) => {
+        this.TodayProject.projectList.forEach((task,index) => {
             this.div.textContent = `${task.title} ${task.description} ${task.priority} ${task.priority}`
             this.contentDiv.appendChild(this.div)
             
@@ -71,7 +80,7 @@ class showTasksInProjectUI
             // create a delete button
             this.deleteTaskBtn.setAttribute("type","button")
             this.deleteTaskBtn.textContent = "Delete"
-            this.deleteTaskBtn.setAttribute("value",`${this.value++}`)
+            this.deleteTaskBtn.setAttribute("data-index", index)
 
             this.contentDiv.appendChild(this.completeTaskBtn)
             this.contentDiv.appendChild(this.deleteTaskBtn)
@@ -85,11 +94,24 @@ class showTasksInProjectUI
     
     removeTask()
     {
-        this.deleteBtnVal = this.deleteTaskBtn.value
+        console.log(this.div)
+
         this.TodayProject.projectList.forEach((task,index) => {
             this.deleteTaskBtn.addEventListener("click",() => {
-                    this.div.style.textDecorationLine = "line-through"
-                    console.log(this.TodayProject.removeTaskFromProjects(index))
+
+
+                // find the task using the index stored in the delete btn att
+                const taskId = this.deleteTaskBtn.getAttribute("data-index")
+                const taskToRemove = this.TodayProject.projectList[taskId]
+
+                // find the div using the index
+                // this.div[index].style.textDecorationLine = "line-through"
+
+
+                this.TodayProject.removeTaskFromProjects(taskToRemove)
+                const trashTasks = this.TodayProject.getAllTrashTasks()
+                console.log(trashTasks)
+                
             })
         })
     }
