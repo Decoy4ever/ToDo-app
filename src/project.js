@@ -1,6 +1,5 @@
 // import the `class Task`
-import {Task} from "./task.js"
-import {taskUI} from "./task.js"
+import {Task, taskUI} from "./task.js"
 
 class TodayProject 
 {
@@ -36,6 +35,9 @@ class TodayProject
     }
 }
 
+/**
+ * Handle the DOM Parts
+ */
 class ProjectUI
 {
     constructor()
@@ -49,17 +51,20 @@ class ProjectUI
         this.contentDivContainer = document.createElement("div")
         this.contentDivContainer.setAttribute("class","content-container")
         this.isListenerAttached = false;
-
+        this.mainContent.appendChild(taskUI.div)
     }
 
     content()
     {
-        // display the add task bar in homepg
         taskUI.addTaskBarUI()
+        this.contentDivContainer.textContent = ""
+
     }
 
     createTaskUI()
     {
+        // show the add task bar in home pg
+
         // retrieve the values of user input
         let title = `${this.title.value}`
         let description = `${this.description.value}`
@@ -72,7 +77,8 @@ class ProjectUI
         this.deleteTaskBtn = document.createElement("button")
         this.taskContent = document.createElement("div")
         this.taskContent.setAttribute("class","task-content")
-        this.contentDivContainer.appendChild(this.taskContent)
+        // this.contentDivContainer.appendChild(this.taskContent)
+
 
         // create a instance of task class
         this.newTask = new Task(title,description,dueDate,priority)
@@ -99,12 +105,14 @@ class ProjectUI
             this.taskContent.appendChild(this.deleteTaskBtn)
 
             this.contentDivContainer.appendChild(this.taskContent)
+            this.contentDivContainer.appendChild(this.taskContent)
 
-            this.mainContent.appendChild(this.contentDivContainer)
+            
         }) 
+        // this.mainContent.appendChild(this.contentDivContainer)
+        taskUI.div.insertAdjacentElement("afterend", this.contentDivContainer)
 
-        
-
+    
         // return the list of tasks in home project
         console.log("Added the following Tasks")
         console.log(this.TodayProject.getAllTasks())
@@ -151,21 +159,9 @@ class ProjectUI
     }
 }
 
-class RemoveUI
-{
-    content()
-    {
-        // display the trashlist
-        this.showTrashList = new ProjectUI()
-        this.trashList = new TodayProject()
-        this.trashList.getAllTrashTasks()
-        this.mainContent = document.querySelector(".main-content")
 
-        this.mainContent.style.backGroundColor = "Yellow"
-    }
-}
 
-class DialogUI
+export class DialogUI
 {
     constructor()
     {   
@@ -173,10 +169,12 @@ class DialogUI
         this.dialog = document.querySelector(".dialog")
         this.submitBtn = document.querySelector(".submit-btn");
         this.closeModal = document.querySelector('.exit-btn');
+
     }
     
     showDialog()
     {
+
         // show the modal
         taskUI.showBtn.addEventListener("click",() => {
             console.log("Opened Dialog")
@@ -189,7 +187,6 @@ class DialogUI
         this.submitBtn.addEventListener('click',(e) => 
         {
             console.log("Form Submitted")
-            // this.projectTask.content()
             this.projectTask.createTaskUI()
             this.projectTask.removeTaskUI()
             e.preventDefault();
@@ -210,8 +207,29 @@ class DialogUI
 }
 
 
-export const dialogUI = new DialogUI()
+// export const dialogUI = new DialogUI()
 export const homeUI = new ProjectUI()
+
+
+
+
+
+// class RemoveUI
+// {
+//     content()
+//     {
+//         // display the trashlist
+//         this.showTrashList = new ProjectUI()
+//         this.trashList = new TodayProject()
+//         this.trashList.getAllTrashTasks()
+//         this.mainContent = document.querySelector(".main-content")
+
+//         this.mainContent.style.backGroundColor = "Yellow"
+//     }
+// }
+
+
+
 // export const removeUI = new RemoveUI()
 
 /**
