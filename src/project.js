@@ -48,23 +48,19 @@ class ProjectUI
         this.description = document.querySelector(".description")
         this.dueDate = document.querySelector(".due-date")
         this.priority = document.querySelector(".priority")
-        this.contentDivContainer = document.createElement("div")
-        this.contentDivContainer.setAttribute("class","content-container")
+
+        this.container = document.createElement("div")
+        this.taskContainerDiv = document.createElement("div")
+        
+        this.container.setAttribute("class","container")
+        this.taskContainerDiv.setAttribute("class","task-container")
+        
+        taskUI.displayAddTaskBar()
         this.isListenerAttached = false;
-        this.mainContent.appendChild(taskUI.div)
     }
-
-    content()
-    {
-        taskUI.addTaskBarUI()
-        this.contentDivContainer.textContent = ""
-
-    }
-
+    
     createTaskUI()
     {
-        // show the add task bar in home pg
-
         // retrieve the values of user input
         let title = `${this.title.value}`
         let description = `${this.description.value}`
@@ -72,13 +68,12 @@ class ProjectUI
         let priority = `${this.priority.value}`
 
         this.para = document.createElement("p")
-        this.para.setAttribute("class","task-div")
         this.completeTaskBtn = document.createElement("button")
         this.deleteTaskBtn = document.createElement("button")
         this.taskContent = document.createElement("div")
+        
+        this.para.setAttribute("class","task-div")
         this.taskContent.setAttribute("class","task-content")
-        // this.contentDivContainer.appendChild(this.taskContent)
-
 
         // create a instance of task class
         this.newTask = new Task(title,description,dueDate,priority)
@@ -97,24 +92,26 @@ class ProjectUI
             // create a delete button
             this.deleteTaskBtn.setAttribute("type","button")
             this.deleteTaskBtn.setAttribute("class","delete-btn")
-            this.deleteTaskBtn.textContent = "Delete"
             this.deleteTaskBtn.setAttribute("data-index", index)
+            this.deleteTaskBtn.textContent = "Delete"
 
+            // append to the div.content-container
             this.taskContent.appendChild(this.para)
             this.taskContent.appendChild(this.completeTaskBtn)
             this.taskContent.appendChild(this.deleteTaskBtn)
-
-            this.contentDivContainer.appendChild(this.taskContent)
-            this.contentDivContainer.appendChild(this.taskContent)
-
             
         }) 
-        // this.mainContent.appendChild(this.contentDivContainer)
-        taskUI.div.insertAdjacentElement("afterend", this.contentDivContainer)
+        
+        // append the div.taskContainerDiv to the container
+        this.taskContainerDiv.appendChild(this.taskContent)
+        this.container.appendChild(this.taskContainerDiv)
+        // this.container.appendChild(taskUI.addTaskBarUI())
+        this.mainContent.appendChild(this.container)
+
 
     
         // return the list of tasks in home project
-        console.log("Added the following Tasks")
+        console.log("Added the following Task to the Array")
         console.log(this.TodayProject.getAllTasks())
         
         this.TodayProject.getAllTasks()
@@ -122,7 +119,7 @@ class ProjectUI
     }
     
     removeTaskUI() {
-        let taskDivContainer = document.querySelector(".content-container");
+        let taskDivContainer = document.querySelector(".task-container");
 
         if (!this.isListenerAttached) 
         {
@@ -145,12 +142,14 @@ class ProjectUI
                     console.log(removeTask)
 
                     // check the task is in the trash List
-                    const trashList = this.TodayProject.getAllTrashTasks()
-                    console.log(trashList)
+                    console.log("Current Trash List")
+                    const currentTrashList = this.TodayProject.getAllTrashTasks()
+                    console.log(currentTrashList)
 
                     // check the current tasks in the project
-                    const getPorjectList = this.TodayProject.getAllTasks()
-                    console.log(getPorjectList)
+                    console.log("Current Project List")
+                    const getTaskinProjectList = this.TodayProject.getAllTasks()
+                    console.log(getTaskinProjectList)
                 }
             });
             // Set the flag to true after attaching the listener
@@ -159,9 +158,7 @@ class ProjectUI
     }
 }
 
-
-
-export class DialogUI
+class DialogUI
 {
     constructor()
     {   
@@ -187,6 +184,7 @@ export class DialogUI
         this.submitBtn.addEventListener('click',(e) => 
         {
             console.log("Form Submitted")
+
             this.projectTask.createTaskUI()
             this.projectTask.removeTaskUI()
             e.preventDefault();
@@ -207,11 +205,8 @@ export class DialogUI
 }
 
 
-// export const dialogUI = new DialogUI()
+export const dialogUI = new DialogUI()
 export const homeUI = new ProjectUI()
-
-
-
 
 
 // class RemoveUI
@@ -221,10 +216,15 @@ export const homeUI = new ProjectUI()
 //         // display the trashlist
 //         this.showTrashList = new ProjectUI()
 //         this.trashList = new TodayProject()
-//         this.trashList.getAllTrashTasks()
+//         console.log(this.showTrashList.removeTaskUI())
 //         this.mainContent = document.querySelector(".main-content")
 
-//         this.mainContent.style.backGroundColor = "Yellow"
+
+//         // this.showTrashList.forEach((trashTask,index) => {
+//         //     const trashTaskDiv = document.createElement("div")
+//         //     trashTaskDiv.textContent = `${trashTask.title}${trashTask.description}${trashTask.dueDate}${trashTask.priority}`
+//         // })
+//         // this.mainContent.appendChild(trashTaskDiv)
 //     }
 // }
 
