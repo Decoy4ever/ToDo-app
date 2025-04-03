@@ -7,10 +7,6 @@ class HomeUI
     {
         this.newProject = new Project()
         this.mainContent = document.querySelector(".main-content")
-        this.title = document.querySelector(".title").value 
-        this.description = document.querySelector(".description").value
-        this.priority = document.querySelector(".priority").value 
-        this.dueDate = document.querySelector(".due-date").value 
 
         // container structures the task
         this.container = document.createElement("div")
@@ -18,10 +14,16 @@ class HomeUI
         this.container.setAttribute("class","container")
         this.taskContainerDiv.setAttribute("class","task-container")
         taskUI.displayAddTaskBar()
+        this.isListenerAttachedFlag = false
     }
 
     createTaskUI()
     {
+        this.title = document.querySelector(".title").value 
+        this.description = document.querySelector(".description").value
+        this.priority = document.querySelector(".priority").value 
+        this.dueDate = document.querySelector(".due-date").value 
+
         this.para = document.createElement("p")
         this.completeTaskBtn = document.createElement("button")
         this.deleteTaskBtn = document.createElement("button")
@@ -34,17 +36,15 @@ class HomeUI
         // create a instance of task class
         this.newTask = new Task(this.title,this.description,this.dueDate,this.priority)
         
-        console.log("Created the following task")
+        console.log("Created task")
         console.log(this.newTask)
 
         // push the instance of task into the projectList
         this.newProject.addTaskToProject(this.newTask)
-
-        this.newProject.projectTaskArr.forEach((task,index) => {
         
-            this.para.textContent = `${task.title} ${task.description} ${task.priority} ${task.priority}`
+        this.newProject.projectTaskArr.forEach((task,index) => {
             this.taskContent.setAttribute("data-index",index)
-
+            this.para.textContent = `${task.title} ${task.description} ${task.priority} ${task.priority}`
 
             // create a complete button for each task
             this.completeTaskBtn.setAttribute("type","button") 
@@ -56,7 +56,6 @@ class HomeUI
             this.deleteTaskBtn.setAttribute("type","button")
             this.deleteTaskBtn.setAttribute("class","delete-btn")
             this.deleteTaskBtn.setAttribute("data-action","delete")
-            // this.deleteTaskBtn.setAttribute("data-index", index)
             this.deleteTaskBtn.textContent = "Delete"
 
             // create a edit button for each task
@@ -70,61 +69,66 @@ class HomeUI
             this.taskContent.appendChild(this.completeTaskBtn)
             this.taskContent.appendChild(this.editTaskBtn)
             this.taskContent.appendChild(this.deleteTaskBtn)
+            this.taskContainerDiv.appendChild(this.taskContent)
+            this.container.appendChild(this.taskContainerDiv)
         }) 
         
         // append the div.taskContainerDiv to the container
-        this.taskContainerDiv.appendChild(this.taskContent)
-        this.container.appendChild(this.taskContainerDiv)
         this.mainContent.appendChild(this.container)
     }
 
-    removeTaskUI()
+    displayActionTaskUI()
     {
-        let taskDivContainer = document.querySelector(".task-container")
-        if (!this.isListenerAttached) 
+        // init the createTaskUI everytime event action occurs
+        this.createTaskUI()
+        if(!this.isListenerAttachedFlag)
         {
-            let taskDivContainer = document.querySelector(".task-container");
-            console.log("Before Trash List")
-
-            taskDivContainer.addEventListener("click", (event) => 
+            let taskDivContainer = document.querySelector(".task-container")
+            taskDivContainer.addEventListener("click",(e) =>
             {
-                let button = event.target.closest("button");
+                // find the element that matches the target element, parent or ancestor
+                let taskElement = e.target.closest("[data-index]")
     
-                if (button && button.hasAttribute("data-index"))
+                // find its data attribute of the element and get the data-attribute value
+                let taskID = taskElement.dataset.index
+    
+                // find the data-action attribute depending on the event clicked
+                let actionEvent = e.target.dataset.action
+    
+                if(actionEvent === "delete")
                 {
-                    console.log("Event Triggered");
-    
-                    let taskID = button.getAttribute("data-index");
-                    console.log(`Delete button clicked for taskID: ${taskID}`);
+                    // console.log(taskElement)
+                    // console.log(`task deleted is ${taskID}`)
+                    let para = taskElement.querySelector("p")
+                    para.style.textDecorationLine = "line-through"
+                    para.style.border = "solid 1px red"
 
                     // find the task to remove by index
-                    const taskToRemove = this.newProject.projectTaskArr[taskID]
-                    console.log(taskToRemove)
+                    let taskToRemoveElement = this.newProject.projectTaskArr[taskID]
+                    console.log("Delete task")
+                    console.log(taskToRemoveElement)
 
-                    // remove the task
-                    const removeTask = this.newProject.removeTaskFromProjects(taskToRemove)
-                    console.log(removeTask)
+                    // push the task to the trashListArr
+                    const remoedTask = this.newProject.removeTaskFromProjects(taskToRemoveElement)
 
                     // check the task is in the trash List
                     console.log("Current Trash List")
-                    // this.TodayProject.getAllTrashTasks()
-                    console.log(this.currentTrashList)
+                    const displayTrashTasks = this.newProject.getAllTrashTasks()
+                    console.log(displayTrashTasks)
 
-                    // print out all the deleted tasks
-                    const trashTaskDiv = document.createElement("div")
-                    this.newProject.trashTaskArr.forEach((task,index) => {
-                        trashTaskDiv.textContent = `${task.title}, ${task.description}`
-                    })
-                    this.taskContent.appendChild(trashTaskDiv)
-
-                    // // check the current tasks in the project
+                    // check the current tasks in the project
                     console.log("Current Project List")
                     const getTaskinProjectList = this.newProject.getAllTasks()
                     console.log(getTaskinProjectList)
-                }
-            });
-            // Set the flag to true after attaching the listener
-            this.isListenerAttached = true;
+                }  
+                else if(actionEvent === "complete")
+                {
+                    let para = taskElement.querySelector("p")
+                    para.style.textDecorationLine = "none"
+                    para.style.border = "solid 1px green"
+                }              
+            })
+            this.isListenerAttachedFlag = true
         }
     }
 }
@@ -156,9 +160,7 @@ class DialogUI
         this.submitBtn.addEventListener('click',(e) => 
         {
             console.log("Form Submitted")
-            this.home.createTaskUI()
-            // this.home.editTaskUI()
-            this.home.removeTaskUI()
+            this.home.displayActionTaskUI()
             e.preventDefault();
             this.dialog.close();  
         }) 
