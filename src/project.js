@@ -21,6 +21,17 @@ export class Project
         this.projectTaskArr = this.projectTaskArr.filter((el) => el !== task)
     }
 
+    editTaskFromProjects(taskToModify, property, value)
+    {
+        this.projectTaskArr.forEach((task,index) => {
+            if(task === taskToModify)
+            {
+                taskToModify[property] = value
+            }
+        })
+        return taskToModify
+    }
+
     getAllTrashTasks()
     {
         return this.trashTaskArr

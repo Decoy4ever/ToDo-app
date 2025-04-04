@@ -81,6 +81,9 @@ class HomeUI
     {
         // init the createTaskUI everytime event action occurs
         this.createTaskUI()
+        console.log("Current Tasks")
+        console.log(this.newProject.getAllTasks())
+
         if(!this.isListenerAttachedFlag)
         {
             let taskDivContainer = document.querySelector(".task-container")
@@ -94,6 +97,7 @@ class HomeUI
     
                 // find the data-action attribute depending on the event clicked
                 let actionEvent = e.target.dataset.action
+                
     
                 if(actionEvent === "delete")
                 {
@@ -109,7 +113,7 @@ class HomeUI
                     console.log(taskToRemoveElement)
 
                     // push the task to the trashListArr
-                    const remoedTask = this.newProject.removeTaskFromProjects(taskToRemoveElement)
+                    const removedTask = this.newProject.removeTaskFromProjects(taskToRemoveElement)
 
                     // check the task is in the trash List
                     console.log("Current Trash List")
@@ -126,7 +130,27 @@ class HomeUI
                     let para = taskElement.querySelector("p")
                     para.style.textDecorationLine = "none"
                     para.style.border = "solid 1px green"
-                }              
+                } 
+                else if(actionEvent === "edit")
+                {
+                    console.log(`Edit the task at at ${taskID}`)
+                    let taskToFindElement = this.newProject.projectTaskArr[taskID]
+
+
+                    let properties = ["title","description","dueDate","priority"]
+                    console.log("Find the task and print the title")
+                    console.log(taskToFindElement.title)
+                    
+                    let property = ["title","description","dueDate","priority"]
+
+                    const editTask = this.newProject.editTaskFromProjects(taskToFindElement, properties[0], "Maths HW" )
+                    console.log(editTask)
+
+                    // print the rest of array with the modified edit element
+                    console.log("Modified Tasks")
+                    console.log(this.newProject.getAllTasks())
+
+                }             
             })
             this.isListenerAttachedFlag = true
         }
