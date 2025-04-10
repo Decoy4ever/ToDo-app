@@ -1,29 +1,65 @@
 import "./styles.css"
-import {dialogUI, homeUI} from "./project.js"
+import {homePG, dialogUI} from "./UI.js"
 import {taskUI} from "./task.js"
-import {removeUI} from "./project.js"
 
 
+// Handle the DOM manipulation of the dialog
+class DialogUI
+{
+    constructor()
+    {   
+        this.dialog = document.querySelector(".dialog")
+        this.submitBtn = document.querySelector(".submit-btn");
+        this.closeModal = document.querySelector('.exit-btn');
+    }
+    
+    showDialog()
+    {
+        // show the modal
+        taskUI.showBtn.addEventListener("click",() => {
+            console.log("Opened Dialog")
+            this.dialog.showModal()
+        })
+    }
 
+    submitModal()
+    {
+        this.submitBtn.addEventListener('click',(e) => 
+        {
+            console.log("Form Submitted")
+            homePG.displayActionTaskUI()
+            e.preventDefault();
+            this.dialog.close();  
+        }) 
+    }
 
+    exitModal()
+    {
+        // close the dialog form
+        this.closeModal.addEventListener('click',(e) => 
+        {
+            this.dialog.close();
+            console.log("Closed DIalog")
+            e.preventDefault();
+        }) 
+    }
+}
 class HomePg
 {
     content()
     {
-        let navBar = document.querySelector("nav")   
-        
-        // display the add task bar for each projects
-        taskUI.displayAddTaskBar()
+        let navBar = document.querySelector("nav")
+        let dialog = new DialogUI()  
 
-        // display the dialog funtionalities
-        dialogUI.showDialog()
-        dialogUI.submitModal()
-        dialogUI.exitModal()
-
+        dialog.showDialog()
+        dialog.submitModal()
+        dialog.exitModal()
+     
         navBar.addEventListener("click",(event) => {
             if(event.target.className === "today-list")
             {
                 // display the list of Tasks FOR today
+                // homePG.createTaskUI()
             }
             else if(event.target.className === "trash-list")
             {

@@ -14,7 +14,10 @@ class HomeUI
         this.container.setAttribute("class","container")
         this.taskContainerDiv.setAttribute("class","task-container")
         taskUI.displayAddTaskBar()
+        this.dialog = document.querySelector(".dialog")
+        // this.taskContainerDiv.textContent = ""
         this.isListenerAttachedFlag = false
+
     }
 
     createTaskUI()
@@ -24,14 +27,14 @@ class HomeUI
         this.priority = document.querySelector(".priority").value 
         this.dueDate = document.querySelector(".due-date").value 
 
+        this.taskContent = document.createElement("div")
         this.para = document.createElement("p")
         this.completeTaskBtn = document.createElement("button")
         this.deleteTaskBtn = document.createElement("button")
         this.editTaskBtn = document.createElement("button")
-        this.taskContent = document.createElement("div")
 
-        this.para.setAttribute("class","task-div")
         this.taskContent.setAttribute("class","task-content")
+        this.para.setAttribute("class","task-div")
 
         // create a instance of task class
         this.newTask = new Task(this.title,this.description,this.dueDate,this.priority)
@@ -77,18 +80,20 @@ class HomeUI
         this.mainContent.appendChild(this.container)
     }
 
+    // Handle the mainpulation of the edit, complete and delete functionality for the task
     displayActionTaskUI()
     {
-        // init the createTaskUI everytime event action occurs
         this.createTaskUI()
+        // init the createTaskUI everytime event action occurs
         console.log("Current Tasks")
         console.log(this.newProject.getAllTasks())
-
+        
         if(!this.isListenerAttachedFlag)
         {
             let taskDivContainer = document.querySelector(".task-container")
             taskDivContainer.addEventListener("click",(e) =>
             {
+
                 // find the element that matches the target element, parent or ancestor
                 let taskElement = e.target.closest("[data-index]")
     
@@ -98,7 +103,6 @@ class HomeUI
                 // find the data-action attribute depending on the event clicked
                 let actionEvent = e.target.dataset.action
                 
-    
                 if(actionEvent === "delete")
                 {
                     // console.log(taskElement)
@@ -130,77 +134,17 @@ class HomeUI
                     let para = taskElement.querySelector("p")
                     para.style.textDecorationLine = "none"
                     para.style.border = "solid 1px green"
-                } 
-                else if(actionEvent === "edit")
-                {
-                    console.log(`Edit the task at at ${taskID}`)
-                    let taskToFindElement = this.newProject.projectTaskArr[taskID]
-
-
-                    let properties = ["title","description","dueDate","priority"]
-                    console.log("Find the task and print the title")
-                    console.log(taskToFindElement.title)
-                    
-                    let property = ["title","description","dueDate","priority"]
-
-                    const editTask = this.newProject.editTaskFromProjects(taskToFindElement, properties[0], "Maths HW" )
-                    console.log(editTask)
-
-                    // print the rest of array with the modified edit element
-                    console.log("Modified Tasks")
-                    console.log(this.newProject.getAllTasks())
-
-                }             
+                }            
             })
             this.isListenerAttachedFlag = true
         }
     }
 }
 
-export const homePG = new HomeUI()
-
-
-class DialogUI
+class editDialog
 {
-    constructor()
-    {   
-        this.home = new HomeUI()
-        this.dialog = document.querySelector(".dialog")
-        this.submitBtn = document.querySelector(".submit-btn");
-        this.closeModal = document.querySelector('.exit-btn');
-    }
     
-    showDialog()
-    {
-        // show the modal
-        taskUI.showBtn.addEventListener("click",() => {
-            console.log("Opened Dialog")
-            this.dialog.showModal()
-        })
-    }
-
-    submitModal()
-    {
-        this.submitBtn.addEventListener('click',(e) => 
-        {
-            console.log("Form Submitted")
-            this.home.displayActionTaskUI()
-            e.preventDefault();
-            this.dialog.close();  
-        }) 
-    }
-
-    exitModal()
-    {
-        // close the dialog form
-        this.closeModal.addEventListener('click',(e) => 
-        {
-            this.dialog.close();
-            console.log("Closed DIalog")
-            e.preventDefault();
-        }) 
-    }
 }
 
-
-export const dialogUI = new DialogUI()
+export const homePG = new HomeUI()
+// export const dialogUI = new DialogUI()
