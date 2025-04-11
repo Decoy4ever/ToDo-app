@@ -1,5 +1,6 @@
 import {Task, taskUI} from "./task.js"
 import {Project} from "./project.js"
+import {LocalStorageConverter} from "./localStorageConverter.js"
 
 class HomeUI
 {
@@ -15,7 +16,6 @@ class HomeUI
         this.taskContainerDiv.setAttribute("class","task-container")
         taskUI.displayAddTaskBar()
         this.dialog = document.querySelector(".dialog")
-        // this.taskContainerDiv.textContent = ""
         this.isListenerAttachedFlag = false
 
     }
@@ -38,13 +38,15 @@ class HomeUI
 
         // create a instance of task class
         this.newTask = new Task(this.title,this.description,this.dueDate,this.priority)
-        
+
+        // convert the array task as a local storage        
         console.log("Created task")
         console.log(this.newTask)
 
         // push the instance of task into the projectList
         this.newProject.addTaskToProject(this.newTask)
-        
+
+        // create the task content
         this.newProject.projectTaskArr.forEach((task,index) => {
             this.taskContent.setAttribute("data-index",index)
             this.para.textContent = `${task.title} ${task.description} ${task.priority} ${task.priority}`
@@ -80,11 +82,20 @@ class HomeUI
         this.mainContent.appendChild(this.container)
     }
 
+
     // Handle the mainpulation of the edit, complete and delete functionality for the task
-    displayActionTaskUI()
+    displayActionsForTaskUI()
     {
-        this.createTaskUI()
         // init the createTaskUI everytime event action occurs
+        this.createTaskUI()
+
+        // set the converted array into string via localStorage 
+        // display the array by using getters on the localStorage
+        // if not found print "No task array"
+        let stringifiedArr = new LocalStorageConverter()
+        stringifiedArr.setTaskIntoLocalStorage("taskArr",this.newProject.projectTaskArr)
+        // stringifiedTaskArr.getTaskFromLocalStorgae()
+
         console.log("Current Tasks")
         console.log(this.newProject.getAllTasks())
         
@@ -93,7 +104,6 @@ class HomeUI
             let taskDivContainer = document.querySelector(".task-container")
             taskDivContainer.addEventListener("click",(e) =>
             {
-
                 // find the element that matches the target element, parent or ancestor
                 let taskElement = e.target.closest("[data-index]")
     
@@ -141,10 +151,6 @@ class HomeUI
     }
 }
 
-class editDialog
-{
-    
-}
 
 export const homePG = new HomeUI()
 // export const dialogUI = new DialogUI()
