@@ -27,15 +27,6 @@ class HomeUI
         this.priority = document.querySelector(".priority").value 
         this.dueDate = document.querySelector(".due-date").value 
 
-        this.taskContent = document.createElement("div")
-        this.para = document.createElement("p")
-        this.completeTaskBtn = document.createElement("button")
-        this.deleteTaskBtn = document.createElement("button")
-        this.editTaskBtn = document.createElement("button")
-
-        this.taskContent.setAttribute("class","task-content")
-        this.para.setAttribute("class","task-div")
-
         // create a instance of task class
         this.newTask = new Task(this.title,this.description,this.dueDate,this.priority)
 
@@ -46,59 +37,62 @@ class HomeUI
         // push the instance of task into the projectList
         this.newProject.addTaskToProject(this.newTask)
 
-        // create the task content
+        this.taskContent = document.createElement("div")
+        this.taskContent.setAttribute("class","task-content")
+        
+        // create a complete button for each task
+        this.completeTaskBtn = document.createElement("button")
+        this.completeTaskBtn.setAttribute("type","button") 
+        this.completeTaskBtn.setAttribute("class","complete") 
+        this.completeTaskBtn.setAttribute("data-action","complete")
+        this.completeTaskBtn.textContent = "Complete"
+        
+        // create a delete button for each task
+        this.deleteTaskBtn = document.createElement("button")
+        this.deleteTaskBtn.setAttribute("type","button")
+        this.deleteTaskBtn.setAttribute("class","delete-btn")
+        this.deleteTaskBtn.setAttribute("data-action","delete")
+        this.deleteTaskBtn.textContent = "Delete"
+        
+        // create a edit button for each task
+        this.editTaskBtn = document.createElement("button")
+        this.editTaskBtn.setAttribute("type","button")
+        this.editTaskBtn.setAttribute("class","edit-button")
+        this.editTaskBtn.setAttribute("data-action","edit")
+        this.editTaskBtn.textContent = "Edit"
+    }
+
+    displayTaskUI()
+    {
+        // set the converted array into string via localStorage 
+        // display the array by using getters on the localStorage
+        // if not found print "No task array"
+        let stringifiedArr = new LocalStorageConverter()
+        stringifiedArr.setTaskIntoLocalStorage("taskArr",this.newProject.projectTaskArr)
+        
+        // init the createTaskUI everytime event action occurs
+        this.createTaskUI()
+        this.para = document.createElement("p")
         this.newProject.projectTaskArr.forEach((task,index) => {
+            // console.log(task.title)
+            this.para.textContent = `${task.title} ${task.description} ${task.dueDate} ${task.priority}`
             this.taskContent.setAttribute("data-index",index)
-            this.para.textContent = `${task.title} ${task.description} ${task.priority} ${task.priority}`
-
-            // create a complete button for each task
-            this.completeTaskBtn.setAttribute("type","button") 
-            this.completeTaskBtn.setAttribute("class","complete") 
-            this.completeTaskBtn.setAttribute("data-action","complete")
-            this.completeTaskBtn.textContent = "Complete"
-            
-            // create a delete button for each task
-            this.deleteTaskBtn.setAttribute("type","button")
-            this.deleteTaskBtn.setAttribute("class","delete-btn")
-            this.deleteTaskBtn.setAttribute("data-action","delete")
-            this.deleteTaskBtn.textContent = "Delete"
-
-            // create a edit button for each task
-            this.editTaskBtn.setAttribute("type","button")
-            this.editTaskBtn.setAttribute("class","edit-button")
-            this.editTaskBtn.setAttribute("data-action","edit")
-            this.editTaskBtn.textContent = "Edit"
-
-            // append to the div.content-container
             this.taskContent.appendChild(this.para)
             this.taskContent.appendChild(this.completeTaskBtn)
             this.taskContent.appendChild(this.editTaskBtn)
             this.taskContent.appendChild(this.deleteTaskBtn)
             this.taskContainerDiv.appendChild(this.taskContent)
-            this.container.appendChild(this.taskContainerDiv)
-        }) 
-        
-        // append the div.taskContainerDiv to the container
-        this.mainContent.appendChild(this.container)
+        })
+        this.mainContent.appendChild(this.taskContainerDiv)
+
+        console.log("Current Tasks")
+        console.log(this.newProject.getAllTasks())
     }
 
 
     // Handle the mainpulation of the edit, complete and delete functionality for the task
     displayActionsForTaskUI()
     {
-        // init the createTaskUI everytime event action occurs
-        this.createTaskUI()
-
-        // set the converted array into string via localStorage 
-        // display the array by using getters on the localStorage
-        // if not found print "No task array"
-        let stringifiedArr = new LocalStorageConverter()
-        stringifiedArr.setTaskIntoLocalStorage("taskArr",this.newProject.projectTaskArr)
-        // stringifiedTaskArr.getTaskFromLocalStorgae()
-
-        console.log("Current Tasks")
-        console.log(this.newProject.getAllTasks())
-        
         if(!this.isListenerAttachedFlag)
         {
             let taskDivContainer = document.querySelector(".task-container")
@@ -115,8 +109,8 @@ class HomeUI
                 
                 if(actionEvent === "delete")
                 {
-                    // console.log(taskElement)
-                    // console.log(`task deleted is ${taskID}`)
+                    console.log(taskElement)
+                    console.log(`task deleted is ${taskID}`)
                     let para = taskElement.querySelector("p")
                     para.style.textDecorationLine = "line-through"
                     para.style.border = "solid 1px red"
@@ -144,7 +138,11 @@ class HomeUI
                     let para = taskElement.querySelector("p")
                     para.style.textDecorationLine = "none"
                     para.style.border = "solid 1px green"
-                }            
+                } 
+                else if(actionEvent === "edit")
+                {
+
+                }           
             })
             this.isListenerAttachedFlag = true
         }

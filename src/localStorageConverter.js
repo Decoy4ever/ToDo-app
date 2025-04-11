@@ -1,11 +1,11 @@
 export class LocalStorageConverter
 {
-    setTaskIntoLocalStorage(key,value)
+    setTaskIntoLocalStorage(keyStr,value)
     {
        let stringifiedTaskArr = JSON.stringify(value)
-       console.log(key)
+       console.log(keyStr)
        console.log(stringifiedTaskArr)
-       localStorage.setItem(key,stringifiedTaskArr)
+       localStorage.setItem(keyStr,stringifiedTaskArr)
     }
 }
 

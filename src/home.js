@@ -3,6 +3,7 @@ import {homePG, dialogUI} from "./UI.js"
 import {taskUI} from "./task.js"
 
 
+
 // Handle the DOM manipulation of the dialog
 class DialogUI
 {
@@ -27,7 +28,8 @@ class DialogUI
         this.submitBtn.addEventListener('click',(e) => 
         {
             console.log("Form Submitted")
-            homePG.displayActionTaskUI()
+            homePG.displayTaskUI()
+            homePG.displayActionsForTaskUI()
             e.preventDefault();
             this.dialog.close();  
         }) 
