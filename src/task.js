@@ -39,25 +39,6 @@ class TaskUI
         this.dueDate = document.querySelector(".due-date")
         this.priority = document.querySelector(".priority")
         this.addDiv = document.createElement("div")
-    } 
-
-    // create the add task bar
-    displayAddTaskBar()
-    {  
-        this.addDiv.textContent = ""
-        this.addDiv.classList.add("add-container")
-        
-        this.showBtn.textContent = "+"
-        this.showBtn.setAttribute("type", "button")
-        this.showBtn.setAttribute("class","addBtn")
-
-        this.input.setAttribute("type","text")
-        this.input.setAttribute("placeholder","+ Add task")
-        
-        this.form.appendChild(this.input)
-        this.form.appendChild(this.showBtn)
-        this.addDiv.appendChild(this.form)
-        this.mainContent.appendChild(this.addDiv)
     }    
 }
 
