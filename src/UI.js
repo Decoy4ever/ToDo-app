@@ -1,6 +1,9 @@
-import {Task, taskUI} from "./task.js"
+import {Task} from "./task.js"
 import {Project} from "./project.js"
 import {LocalStorageConverter} from "./localStorageConverter.js"
+
+
+
 
 class HomeUI
 {
@@ -14,7 +17,6 @@ class HomeUI
         this.taskContainerDiv = document.createElement("div")
         this.container.setAttribute("class","container")
         this.taskContainerDiv.setAttribute("class","task-container")
-        taskUI.displayAddTaskBar()
         this.dialog = document.querySelector(".dialog")
         this.isListenerAttachedFlag = false
 
@@ -150,5 +152,50 @@ class HomeUI
 }
 
 
+// Handle the DOM manipulation of the dialog
+class DialogUI
+{
+    constructor()
+    {   
+        this.addBtn = document.querySelector(".add-btn")
+        this.dialog = document.querySelector(".dialog")
+        this.submitBtn = document.querySelector(".submit-btn");
+        this.closeModal = document.querySelector('.exit-btn');
+    }
+    
+    showDialog()
+    {
+        // show the modal
+        this.addBtn.addEventListener("click",() => {
+            console.log("Opened Dialog")
+            this.dialog.showModal()
+        })
+    }
+
+    submitModal()
+    {
+        this.submitBtn.addEventListener('click',(e) => 
+        {
+            console.log("Form Submitted")
+            homePG.displayTaskUI()
+            homePG.displayActionsForTaskUI()
+            e.preventDefault();
+            this.dialog.close();  
+        }) 
+    }
+
+    exitModal()
+    {
+        // close the dialog form
+        this.closeModal.addEventListener('click',(e) => 
+        {
+            this.dialog.close();
+            console.log("Closed DIalog")
+            e.preventDefault();
+        }) 
+    }
+}
+
+export const dialog = new DialogUI()
 export const homePG = new HomeUI()
 // export const dialogUI = new DialogUI()
