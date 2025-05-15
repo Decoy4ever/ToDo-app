@@ -24,25 +24,7 @@ export class Task
     }
 }
 
-class TaskUI
-{  
-    constructor()
-    {
-        this.tasks = new Task()
-        this.mainContent = document.querySelector(".main-content")
-        this.form = document.createElement("form")
-        this.showBtn = document.createElement("button")
-        this.input = document.createElement("input")
 
-        this.title = document.querySelector(".title")
-        this.description = document.querySelector(".description")
-        this.dueDate = document.querySelector(".due-date")
-        this.priority = document.querySelector(".priority")
-        this.addDiv = document.createElement("div")
-    }    
-}
-
-export const taskUI = new TaskUI()
 
 
 
