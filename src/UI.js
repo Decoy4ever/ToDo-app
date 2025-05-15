@@ -14,6 +14,8 @@ class TaskUI
         this.container.setAttribute("class","container")
         // this.taskContainerDiv = document.createElement("div")
         // this.taskContainerDiv.setAttribute("class","task-container")
+
+        this.flag = false
     }
 
     /**
@@ -102,7 +104,68 @@ class TaskUI
     
         console.log("Current Tasks")
         console.log(this.newProject.getAllTasks())
+    }
 
+    /**
+     * Handle the actions for the task such as edit, delete and complete
+     */
+    actionsForTasks()
+    {
+        if(!this.flag)
+        {
+            let getContainerDiv = document.querySelector(".container")
+            getContainerDiv.addEventListener("click",(e) => {
+                // find the element that contains the attribute data-index
+                let taskElement = e.target.closest("[data-index]")
+                console.log(taskElement)
+
+                // find the value of the selected element data index
+                let taskID = taskElement.dataset.index
+                console.log(taskID)
+
+                // find the data attribute depending on the event clicked
+                let actionEvent = e.target.dataset.action
+                console.log(actionEvent)
+
+                if(actionEvent === "delete")
+                {
+                    console.log(taskElement)
+                    console.log(`task deleted is ${taskID}`)
+                    let para = taskElement.querySelector("p")
+                    para.style.textDecorationLine = "line-through"
+                    para.style.border = "solid 1px red"
+
+                    // find the task to remove by index
+                    let taskToRemoveElement = this.newProject.projectTaskArr[taskID]
+                    console.log("Delete task")
+                    console.log(taskToRemoveElement)
+
+                    // push the task to the trashListArr
+                    const removedTask = this.newProject.removeTaskFromProjects(taskToRemoveElement)
+
+                    // check the task is in the trash List
+                    console.log("Current Trash List")
+                    const displayTrashTasks = this.newProject.getAllTrashTasks()
+                    console.log(displayTrashTasks)
+
+                    // check the current tasks in the project
+                    console.log("Current Project List")
+                    const getTaskinProjectList = this.newProject.getAllTasks()
+                    console.log(getTaskinProjectList)
+                }  
+                else if(actionEvent === "complete")
+                {
+                    let para = taskElement.querySelector("p")
+                    para.style.textDecorationLine = "none"
+                    para.style.border = "solid 1px green"
+                } 
+                else if(actionEvent === "edit")
+                {
+
+                }           
+            })
+            this.isListenerAttachedFlag = true
+        }
     }
 }
 
@@ -154,64 +217,6 @@ export const tasks = new TaskUI()
 export const dialog = new DialogUI()
 
 
-//     // Handle the mainpulation of the edit, complete and delete functionality for the task
-//     displayActionsForTaskUI()
-//     {
-//         if(!this.isListenerAttachedFlag)
-//         {
-//             let taskDivContainer = document.querySelector(".task-container")
-//             taskDivContainer.addEventListener("click",(e) =>
-//             {
-//                 // find the element that matches the target element, parent or ancestor
-//                 let taskElement = e.target.closest("[data-index]")
-    
-//                 // find its data attribute of the element and get the data-attribute value
-//                 let taskID = taskElement.dataset.index
-    
-//                 // find the data-action attribute depending on the event clicked
-//                 let actionEvent = e.target.dataset.action
-                
-//                 if(actionEvent === "delete")
-//                 {
-//                     console.log(taskElement)
-//                     console.log(`task deleted is ${taskID}`)
-//                     let para = taskElement.querySelector("p")
-//                     para.style.textDecorationLine = "line-through"
-//                     para.style.border = "solid 1px red"
-
-//                     // find the task to remove by index
-//                     let taskToRemoveElement = this.newProject.projectTaskArr[taskID]
-//                     console.log("Delete task")
-//                     console.log(taskToRemoveElement)
-
-//                     // push the task to the trashListArr
-//                     const removedTask = this.newProject.removeTaskFromProjects(taskToRemoveElement)
-
-//                     // check the task is in the trash List
-//                     console.log("Current Trash List")
-//                     const displayTrashTasks = this.newProject.getAllTrashTasks()
-//                     console.log(displayTrashTasks)
-
-//                     // check the current tasks in the project
-//                     console.log("Current Project List")
-//                     const getTaskinProjectList = this.newProject.getAllTasks()
-//                     console.log(getTaskinProjectList)
-//                 }  
-//                 else if(actionEvent === "complete")
-//                 {
-//                     let para = taskElement.querySelector("p")
-//                     para.style.textDecorationLine = "none"
-//                     para.style.border = "solid 1px green"
-//                 } 
-//                 else if(actionEvent === "edit")
-//                 {
-
-//                 }           
-//             })
-//             this.isListenerAttachedFlag = true
-//         }
-//     }
-// }
 
 
 

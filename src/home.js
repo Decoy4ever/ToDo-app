@@ -14,6 +14,7 @@ class HomePg
         
         // retrieve all the tasks first
         tasks.displayTask()
+        tasks.actionsForTasks()
         dialog.showDialog();      
         dialog.submitModal(() => {
             tasks.createTask();  
