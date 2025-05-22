@@ -8,14 +8,12 @@ class TaskUI
     {
         this.newProject = new Project()
         this.ls = new LocalStorageConverter()
+        this.lisfOfTasks = []
 
         this.mainTaskContainer = document.querySelector(".main-content")
         this.container = document.createElement("div")
         this.container.setAttribute("class","container")
-        // this.taskContainerDiv = document.createElement("div")
-        // this.taskContainerDiv.setAttribute("class","task-container")
-
-        this.flag = false
+        // this.flag = false
     }
 
     /**
@@ -31,36 +29,41 @@ class TaskUI
 
         // create instance of the task 
         this.task = new Task(this.title,this.description,this.dueDate,this.priority)
-
-        // add the task object into the array
-        this.newProject.addTaskToProject(this.task)
-
-        // render the dom elemenets
-        this.renderTask(this.task, this.newProject.projectTaskArr.length);
         
-        // save the newly created task
-        this.saveTask()
+        this.renderTask(this.task)
+        
+        this.saveTask(this.task)  
     }
-
+    
     /**
      * Save the task into Local Storage
-     */
-    saveTask()
-    {
+    */
+    saveTask(task)
+    {   
+        // get all the tasks from the original ls
+        let tasks = this.ls.getTasksFromLocalStorage("tasks") || []
+        
+        // check if the tasks is empty or contains the array
+        console.log(tasks)
+
+        tasks.push(task)
+           
         // save the project with the array of tasks into local storage
-        this.ls.setTaskIntoLocalStorage("tasks",this.newProject.projectTaskArr)
+        this.ls.setTaskIntoLocalStorage("tasks",tasks)
     }
+
 
     /**
      * Render the DOM elements associated with the btns
      */
-    renderTask(task,index)
+    renderTask(task)
     {
         // task instance will have the following attributes
         let taskContent = document.createElement("div")
-        taskContent.setAttribute("class","task-content")
-        taskContent.dataset.index = index;
 
+        taskContent.setAttribute("class","task-content")
+        // // taskContent.dataset.index = index
+        
         this.para = document.createElement("p")
         this.para.textContent = `${task.title} ${task.description} ${task.dueDate} ${task.priority}`                    
 
@@ -95,78 +98,77 @@ class TaskUI
      */
     displayTask()
     {
-        // display the existing tasks first when pg refresh or null
+        // display all the tasks
+        console.log(this.newProject.getAllTasks())
+
         let tasks = this.ls.getTasksFromLocalStorage("tasks") || []
 
         tasks.forEach((task,index) => {
-            this.renderTask(task,index)
+            this.renderTask(task)
         })
-    
-        console.log("Current Tasks")
-        console.log(this.newProject.getAllTasks())
     }
 
     /**
      * Handle the actions for the task such as edit, delete and complete
      */
-    actionsForTasks()
-    {
-        if(!this.flag)
-        {
-            let getContainerDiv = document.querySelector(".container")
-            getContainerDiv.addEventListener("click",(e) => {
-                // find the element that contains the attribute data-index
-                let taskElement = e.target.closest("[data-index]")
-                console.log(taskElement)
+    // actionsForTasks()
+    // {
+    //     if(!this.flag)
+    //     {
+    //         let getContainerDiv = document.querySelector(".container")
+    //         getContainerDiv.addEventListener("click",(e) => {
+    //             // find the element that contains the attribute data-index
+    //             let taskElement = e.target.closest("[data-index]")
+    //             console.log(taskElement)
 
-                // find the value of the selected element data index
-                let taskID = taskElement.dataset.index
-                console.log(taskID)
+    //             // find the value of the selected element data index
+    //             let taskID = taskElement.dataset.index
+    //             console.log(taskID)
 
-                // find the data attribute depending on the event clicked
-                let actionEvent = e.target.dataset.action
-                console.log(actionEvent)
+    //             // find the data attribute depending on the event clicked
+    //             let actionEvent = e.target.dataset.action
 
-                if(actionEvent === "delete")
-                {
-                    console.log(taskElement)
-                    console.log(`task deleted is ${taskID}`)
-                    let para = taskElement.querySelector("p")
-                    para.style.textDecorationLine = "line-through"
-                    para.style.border = "solid 1px red"
+    //             // display which action event is selected "edit, delete or complete"
+    //             console.log(actionEvent)
 
-                    // find the task to remove by index
-                    let taskToRemoveElement = this.newProject.projectTaskArr[taskID]
-                    console.log("Delete task")
-                    console.log(taskToRemoveElement)
+    //             if(actionEvent === "delete")
+    //             {
+    //                 let para = taskElement.querySelector("p")
+    //                 para.style.textDecorationLine = "line-through"
+    //                 para.style.border = "solid 1px red"
 
-                    // push the task to the trashListArr
-                    const removedTask = this.newProject.removeTaskFromProjects(taskToRemoveElement)
+    //                 console.log("Delete task")
+    //                 // let taskToRemoveElement = this.newProject.projectTaskArr[taskID]
+    //                 // console.log(taskToRemoveElement)
 
-                    // check the task is in the trash List
-                    console.log("Current Trash List")
-                    const displayTrashTasks = this.newProject.getAllTrashTasks()
-                    console.log(displayTrashTasks)
+    //                 // push the task to the trashListArr
+    //                 // const removedTask = this.newProject.removeTaskFromProjects(taskToRemoveElement)
+    //                 // console.log(removedTask)
 
-                    // check the current tasks in the project
-                    console.log("Current Project List")
-                    const getTaskinProjectList = this.newProject.getAllTasks()
-                    console.log(getTaskinProjectList)
-                }  
-                else if(actionEvent === "complete")
-                {
-                    let para = taskElement.querySelector("p")
-                    para.style.textDecorationLine = "none"
-                    para.style.border = "solid 1px green"
-                } 
-                else if(actionEvent === "edit")
-                {
+    //                 // check the task is in the trash List
+    //                 // console.log("Current Trash List")
+    //                 // const displayTrashTasks = this.newProject.getAllTrashTasks()
+    //                 // console.log(displayTrashTasks)
 
-                }           
-            })
-            this.isListenerAttachedFlag = true
-        }
-    }
+    //                 // check the current tasks in the project
+    //                 // console.log("Current Project List")
+    //                 // const getTaskinProjectList = this.newProject.getAllTasks()
+    //                 // console.log(getTaskinProjectList)
+    //             }  
+    //             else if(actionEvent === "complete")
+    //             {
+    //                 let para = taskElement.querySelector("p")
+    //                 para.style.textDecorationLine = "none"
+    //                 para.style.border = "solid 1px green"
+    //             } 
+    //             else if(actionEvent === "edit")
+    //             {
+
+    //             }           
+    //         })
+    //         this.isListenerAttachedFlag = true
+    //     }
+    // }
 }
 
 class DialogUI
@@ -194,7 +196,6 @@ class DialogUI
         this.submitBtn.addEventListener('click',(e) => 
         {
             console.log("Form Submitted")
-            // homePG.displayActionsForTaskUI()
             this.task.createTask()
             e.preventDefault();
             this.dialog.close();  
@@ -207,7 +208,7 @@ class DialogUI
         this.closeModal.addEventListener('click',(e) => 
         {
             this.dialog.close();
-            console.log("Closed DIalog")
+            console.log("Closed Dialog")
             e.preventDefault();
         }) 
     }

@@ -1,10 +1,6 @@
 import "./styles.css"
 import {dialog, tasks} from "./UI.js"
-
 import {task} from "./task.js"
-
-
-
 
 class HomePg
 {
@@ -14,12 +10,10 @@ class HomePg
         
         // retrieve all the tasks first
         tasks.displayTask()
-        tasks.actionsForTasks()
         dialog.showDialog();      
         dialog.submitModal(() => {
             tasks.createTask();  
         });
-
         dialog.exitModal();       
 
 

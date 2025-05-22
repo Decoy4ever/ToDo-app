@@ -7,9 +7,9 @@ export class Project
     }
 
     // create a task and add to the project
-    addTaskToProject(tasks)
+    addTaskToProject(task)
     {
-        return this.projectTaskArr.push(tasks)
+        return this.projectTaskArr.push(task)
     }
 
     removeTaskFromProjects(task)
